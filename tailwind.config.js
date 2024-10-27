@@ -17,4 +17,9 @@ export default {
         },
     },
     plugins: [],
+    safelist: {
+        pattern: /./,
+            variants: ['sm', 'md', 'lg', 'xl', '2xl'],
+    },
+
 };
