@@ -25,12 +25,8 @@ return new class extends Migration
             $table->json('weapons')->default($empty);
             $table->json('armours')->default($empty);
             $table->integer('armour_class')->default(10);
-            $table->integer('strength')->default(10);
-            $table->integer('dexterity')->default(10);
-            $table->integer('constitution')->default(10);
-            $table->integer('intelligence')->default(10);
-            $table->integer('wisdom')->default(10);
-            $table->integer('charisma')->default(10);
+            $table->json('abilities')->default($empty);
+            $table->integer('proficiency_bonus')->default(2);
             $table->integer('speed')->default(0);
             $table->json('skills')->default($empty);
             $table->json('saving_throws')->default($empty);

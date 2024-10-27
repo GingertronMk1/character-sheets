@@ -2,6 +2,8 @@
 
 namespace App;
 
+use App\Models\Character;
+
 enum Skill: string
 {
     case ACROBATICS = 'Acrobatics'; // DEX
@@ -26,5 +28,21 @@ enum Skill: string
     public function convertToSkillAttribute(): string
     {
         return strtolower(preg_replace('/\W/', '_', $this->value));
+    }
+
+    public function getBaseAbility(): Ability
+    {
+        return match ($this) {
+            self::ACROBATICS, self::SLEIGHT_OF_HAND, self::STEALTH => Ability::DEXTERITY,
+            self::ANIMAL_HANDLING, self::INSIGHT, self::MEDICINE, self::PERCEPTION, self::SURVIVAL => Ability::WISDOM,
+            self::ARCANA, self::HISTORY, self::INVESTIGATION, self::NATURE, self::RELIGION => Ability::INTELLIGENCE,
+            self::ATHLETICS => Ability::STRENGTH,
+            self::DECEPTION, self::INTIMIDATION, self::PERFORMANCE, self::PERSUASION => Ability::CHARISMA,
+        };
+    }
+
+    public function getAllInfoForCharacter(Character $character): array
+    {
+        return [];
     }
 }
