@@ -42,7 +42,8 @@ hr {
         flex-direction: column;
         justify-content: space-between;
         align-items: stretch;
-        width: 30%;
+        width: 20%;
+        margin-inline-end: 0.3rem;
 
         > label {
             display: flex;

@@ -9,7 +9,7 @@ const plusOrMinus = function (n: number): string {
         case 1: sign = '+'; break;
     }
 
-    return `${sign} ${Math.abs(n)}`;
+    return `${sign}${Math.abs(n)}`;
 
 }
 
@@ -52,7 +52,7 @@ const setSkillModifier = function (node: Element) {
 
     const proficiencyBonus = proficiencyBonusInput.valueAsNumber;
 
-    const numberOfProficienciesInput = document.querySelector(`input[type=number][name=proficiencies\\[${skillName}\\]]`);
+    const numberOfProficienciesInput = document.querySelector(`input[type=number][name=proficiencies\\.${skillName}]`);
     if (!(numberOfProficienciesInput instanceof HTMLInputElement)) {
         throw new Error('Proficiency count not an input')
     };
@@ -71,7 +71,7 @@ const setAllSkillModifiers = () => document
     .forEach(setSkillModifier)
 
 document
-    .querySelectorAll('.character-sheet__skill > input[type=number]')
+    .querySelectorAll('.character-sheet__skill > input[type=number], input[type=number][name=proficiency_bonus]')
     .forEach((node: Element) => (node as HTMLInputElement).addEventListener('input', setAllSkillModifiers))
 
 document
@@ -84,3 +84,13 @@ document
             ({ target }) => setAbilityModifierFromScore(target as HTMLInputElement)
         )
     })
+
+document.querySelector('button#character-sheet-save')?.addEventListener('click', (e) => {
+    const form = document.querySelector('form#character-sheet');
+    if (!(form instanceof HTMLFormElement)) {
+        throw new Error('Form does not exist somehoe')
+    }
+
+    const formData = new FormData(form);
+    console.table(Object.fromEntries(formData));
+})

@@ -6,7 +6,8 @@
         $character ??= new Character();
 @endphp
 @section('content')
-    <div class="character-sheet">
+    <button id="character-sheet-save">Save</button>
+    <form id="character-sheet" class="character-sheet">
         <div class="character-sheet__column">
             <div class="character-sheet__block character-sheet__block--skills-and-proficiencies">
                 <h2>Skills and Proficiencies</h2>
@@ -15,7 +16,8 @@
                 </div>
                 <div class="character-sheet__skills">
                     <label for="inspiration" class="character-sheet__inspiration">
-                        Inspiration <input type="checkbox" name="inspiration" id="inspiration">
+                        <input type="hidden" name="inspiration" value="0">
+                        Inspiration <input type="checkbox" name="inspiration" id="inspiration" value="1">
                     </label>
                     <div class="character-sheet__proficiency-bonus">
                         Proficiency Bonus:
@@ -53,6 +55,6 @@
                 Features and Traits
             </div>
         </div>
-    </div>
+    </form>
 
 @endsection
