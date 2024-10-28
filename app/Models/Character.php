@@ -5,9 +5,37 @@ namespace App\Models;
 use App\Ability;
 use App\Skill;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class Character extends Model
 {
+    public static function boot() {
+        parent::boot();
+        self::creating(function (self $model) {
+            $model->slug = Str::slug($model->name);
+            if (self::where('slug', $model->slug)->exists()) {
+                $i = 1;
+                do {
+                    $model->slug = Str::slug($model->name) . '-' . $i++;
+                } while (self::where('slug', $model->slug)->exists());
+            }
+        });
+    }
+    protected $fillable = [
+        'armour_class',
+        'armours',
+        'class',
+        'inspiration',
+        'level',
+        'name',
+        'passive_perception',
+        'proficiency_bonus',
+        'race',
+        'saving_throws',
+        'speed',
+        'weapons',
+    ];
+
     protected $attributes = [
         'level' => 1,
         'weapons' => '[]',
@@ -16,7 +44,11 @@ class Character extends Model
         'speed' => 30,
         'proficiency_bonus' => 2,
         'saving_throws' => '[]',
-        'inspiration' => false
+        'inspiration' => false,
+        'passive_perception' => 10,
+        'name' => 'Test',
+        'class' => 'Test',
+        'race' => 'Test'
     ];
 
     public function getAbilitiesAttribute(?string $value)

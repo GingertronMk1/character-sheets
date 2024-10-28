@@ -7,7 +7,7 @@ hr {
 .character-sheet {
     width: 100%;
     display: flex;
-    flex-direction: row;
+    flex-flow: row wrap;
     justify-content: space-between;
 
     &__column {
@@ -35,6 +35,10 @@ hr {
             }
         }
 
+        &--combat-stats {
+            display: flex;
+            justify-content: space-between;
+        }
     }
 
     &__abilities {
@@ -112,8 +116,22 @@ hr {
         }
     }
 
+    &__row {
+        width: 100%;
+    }
+
 }
 
 small {
     font-size: 0.5rem;
 }
+
+h6 {
+    margin: 0;
+}
+
+html, body {
+    font-size: 16px;
+    font-family: 'Montserrat', sans-serif;
+}
+

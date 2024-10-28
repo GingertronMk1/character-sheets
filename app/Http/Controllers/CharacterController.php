@@ -21,7 +21,7 @@ class CharacterController extends Controller
      */
     public function create()
     {
-        return view('character.create');
+        return view('character.form');
     }
 
     /**
@@ -29,7 +29,9 @@ class CharacterController extends Controller
      */
     public function store(StoreCharacterRequest $request)
     {
-        //
+        $newCharacter = Character::create($request->input());
+        dd($request->input('skills'), $newCharacter->skills);
+        return redirect()->route('character.show', $newCharacter);
     }
 
     /**
@@ -37,7 +39,7 @@ class CharacterController extends Controller
      */
     public function show(Character $character)
     {
-        //
+        return view('character.form', ['character' => $character]);
     }
 
     /**

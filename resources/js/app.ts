@@ -52,7 +52,7 @@ const setSkillModifier = function (node: Element) {
 
     const proficiencyBonus = proficiencyBonusInput.valueAsNumber;
 
-    const numberOfProficienciesInput = document.querySelector(`input[type=number][name=abilities\\.${skillName}]`);
+    const numberOfProficienciesInput = document.querySelector(`input[type=number][name=abilities\\[${skillName}\\]]`);
     if (!(numberOfProficienciesInput instanceof HTMLInputElement)) {
         throw new Error('Proficiency count not an input')
     };
@@ -66,9 +66,23 @@ const setSkillModifier = function (node: Element) {
     node.innerText = plusOrMinus(totalModifier);
 }
 
-const setAllSkillModifiers = () => document
-    .querySelectorAll('.character-sheet__skill-score')
-    .forEach(setSkillModifier)
+const setInitiative = () => {
+    const dexMod = Number(document.querySelector('#dexterity--modifier')?.getAttribute('data-value'));
+
+    console.log(dexMod);
+
+    const initiativeDisplay = document.querySelector('#initiative');
+    if (initiativeDisplay instanceof HTMLElement) {
+        initiativeDisplay.innerText = plusOrMinus(dexMod);
+    }
+}
+
+const setAllSkillModifiers = () => {
+    setInitiative();
+    document
+        .querySelectorAll('.character-sheet__skill-score')
+        .forEach(setSkillModifier)
+}
 
 document
     .querySelectorAll('.character-sheet__skill > input[type=number], input[type=number][name=proficiency_bonus]')

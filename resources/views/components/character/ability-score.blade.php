@@ -4,7 +4,7 @@
                         </span>
     <input
         type="number"
-        name="abilities.{{ $key }}"
+        name="abilities[{{ $key }}]"
         data-ability-score="{{ $key }}"
         class="character-sheet__ability-score"
         value="{{ $score }}"

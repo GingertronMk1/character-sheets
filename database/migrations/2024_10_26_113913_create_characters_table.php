@@ -21,16 +21,17 @@ return new class extends Migration
             $table->string('class_extra')->nullable();
             $table->string('race');
             $table->string('race_extra')->nullable();
-            $table->foreignIdFor(\App\Models\User::class)->constrained();
-            $table->json('weapons')->default($empty);
-            $table->json('armours')->default($empty);
+//            $table->foreignIdFor(\App\Models\User::class)->constrained();
             $table->integer('armour_class')->default(10);
-            $table->json('abilities')->default($empty);
             $table->integer('proficiency_bonus')->default(2);
             $table->integer('speed')->default(0);
+            $table->boolean('inspiration')->default(false);
+            $table->integer('passive_perception')->default(10);
+            $table->json('weapons')->default($empty);
+            $table->json('armours')->default($empty);
+            $table->json('abilities')->default($empty);
             $table->json('skills')->default($empty);
             $table->json('saving_throws')->default($empty);
-            $table->boolean('inspiration')->default(false);
             $table->timestamps();
         });
     }

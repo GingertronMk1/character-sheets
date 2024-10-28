@@ -9,6 +9,11 @@
     @endif
 </head>
 <body>
+<header>
+    <h1>
+        Jack's Character Sheet thing that he made for some reason
+    </h1>
+</header>
 <div class="container">
     @yield('content')
 </div>
