@@ -1,4 +1,4 @@
-@php use App\Models\Character; @endphp
+@php use App\Models\Character;use App\Skill; @endphp
 @extends('layouts.app')
 
 @php
@@ -11,33 +11,18 @@
             <div class="character-sheet__block character-sheet__block--skills-and-proficiencies">
                 <h2>Skills and Proficiencies</h2>
                 <div class="character-sheet__proficiencies">
-                    @foreach($character->abilities as $scoreKey => $scoreVal)
-                        <label for="{{ $scoreKey }}">
-                        <span class="character-sheet__proficiency-name">
-                            {{ strtoupper(substr($scoreKey, 0, 3)) }}
-                        </span>
-                            <input
-                                type="number"
-                                name="abilities[{{ $scoreKey }}]"
-                                data-ability-score="{{ $scoreKey }}"
-                                class="character-sheet__ability-score"
-                                value="{{ $scoreVal }}"
-                                min="0"
-                                max="20"
-                            />
-
-                            <span id="{{ $scoreKey }}--modifier">
-                            {{-- This gets filled in with JS --}}
-                        </span>
-                        </label>
-                    @endforeach
+                    @each('components.character.ability-score', $character->abilities, 'score')
                 </div>
                 <div class="character-sheet__skills">
-                    @foreach(\App\Skill::cases() as $case)
-                        <span>
-                    {{ $case->value }}
-                </span>
-                    @endforeach
+                    <label for="inspiration" class="character-sheet__inspiration">
+                        Inspiration <input type="checkbox" name="inspiration" id="inspiration">
+                    </label>
+                    <div class="character-sheet__proficiency-bonus">
+                        Proficiency Bonus:
+                        <input type="number" name="proficiency_bonus" id="proficiency_bonus" value="{{ $character->proficiency_bonus }}" />
+                    </div>
+                    <hr />
+                    @each('components.character.skill-score', $character->skills, 'details')
                 </div>
 
             </div>

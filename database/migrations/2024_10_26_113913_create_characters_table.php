@@ -30,6 +30,7 @@ return new class extends Migration
             $table->integer('speed')->default(0);
             $table->json('skills')->default($empty);
             $table->json('saving_throws')->default($empty);
+            $table->boolean('inspiration')->default(false);
             $table->timestamps();
         });
     }

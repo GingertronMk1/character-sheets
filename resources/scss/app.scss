@@ -1,3 +1,9 @@
+hr {
+    width: 100%;
+    border: 1px solid black;
+    margin: 0.1rem;
+}
+
 .character-sheet {
     width: 100%;
     display: flex;
@@ -34,6 +40,7 @@
     &__proficiencies {
         display: flex;
         flex-direction: column;
+        justify-content: space-between;
         align-items: stretch;
         width: 30%;
 
@@ -59,4 +66,27 @@
         flex-direction: column;
         justify-content: space-between;
     }
+
+    &__skill {
+        display: flex;
+        align-items: center;
+
+        input[type=number] {
+            margin-inline-start: auto;
+            margin-inline-end: 1rem;
+            width: auto;
+        }
+
+        & + & {
+            margin-block-start: 0.2rem;
+        }
+    }
+
+    &__skill-score {
+        white-space: nowrap;
+    }
+}
+
+small {
+    font-size: 0.5rem;
 }
