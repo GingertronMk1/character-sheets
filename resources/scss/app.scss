@@ -66,6 +66,10 @@ hr {
         display: flex;
         flex-direction: column;
         justify-content: space-between;
+
+        > * + * {
+            margin-top: 0.5rem;
+        }
     }
 
     &__skill {
@@ -74,7 +78,7 @@ hr {
 
         input[type=number] {
             margin-inline-start: auto;
-            margin-inline-end: 1rem;
+            margin-inline-end: 0.2rem;
             width: auto;
         }
 
@@ -85,7 +89,29 @@ hr {
 
     &__skill-score {
         white-space: nowrap;
+        min-width: 2rem;
+        flex: 1;
+        text-align: end;
     }
+
+    &__skill-name {
+        width: 70%;
+
+        & + input[type=number] {
+            width: 15%;
+        }
+    }
+
+    &__proficiency-bonus {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+
+        & > input[type=number] {
+        }
+    }
+
 }
 
 small {

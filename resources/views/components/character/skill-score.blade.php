@@ -1,5 +1,5 @@
 <div class="character-sheet__skill">
-    <span>
+    <span class="character-sheet__skill-name">
         {{ $details['name'] }} <small>({{ substr($details['ability'], 0, 3) }})</small>
     </span>
     <input type="number" min="0" max="5" name="abilities.{{ $key }}" value="{{ $details['proficiencies'] }}">

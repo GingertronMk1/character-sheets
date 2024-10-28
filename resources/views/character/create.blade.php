@@ -21,8 +21,16 @@
                     </label>
                     <div class="character-sheet__proficiency-bonus">
                         Proficiency Bonus:
-                        <input type="number" name="proficiency_bonus" id="proficiency_bonus" value="{{ $character->proficiency_bonus }}" />
+                        <input type="number"
+                               name="proficiency_bonus"
+                               id="proficiency_bonus"
+                               value="{{ $character->proficiency_bonus }}"
+                               min="0"
+                               max="10"
+                        />
                     </div>
+                    <hr />
+                    @each('components.character.saving-throw', $character->savingThrows, 'throw')
                     <hr />
                     @each('components.character.skill-score', $character->skills, 'details')
                 </div>

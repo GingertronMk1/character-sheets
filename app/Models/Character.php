@@ -34,6 +34,23 @@ class Character extends Model
         return $ret;
     }
 
+    public function getSavingThrowsAttribute(?string $value): array
+    {
+        if (!is_null($value)) {
+            return json_decode($value, true);
+        }
+
+        $ret = [];
+        foreach(Ability::cases() as $ability) {
+            $ret[$ability->value] = [
+                'value' => $this->getAbilityModifier($ability),
+                'proficiencies' => 0,
+            ];
+        }
+
+        return $ret;
+    }
+
     public function getSkillsAttribute(?string $value)
     {
         if (!is_null($value)) {
@@ -51,7 +68,6 @@ class Character extends Model
         }
 
         return $returnVal;
-
     }
 
     public function getSkillModifier(Skill $skill): int
