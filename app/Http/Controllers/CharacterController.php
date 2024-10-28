@@ -30,7 +30,10 @@ class CharacterController extends Controller
     public function store(StoreCharacterRequest $request)
     {
         $newCharacter = Character::create($request->input());
-        dd($request->input('skills'), $newCharacter->skills);
+        $newCharacter->skills = $request->input('skills');
+        $newCharacter->abilities = $request->input('abilities');
+        $newCharacter->saving_throws = $request->input('saving_throws');
+        $newCharacter->save();
         return redirect()->route('character.show', $newCharacter);
     }
 
@@ -55,7 +58,12 @@ class CharacterController extends Controller
      */
     public function update(UpdateCharacterRequest $request, Character $character)
     {
-        //
+        $character->fill($request->input());
+        $character->skills = $request->input('skills');
+        $character->abilities = $request->input('abilities');
+        $character->saving_throws = $request->input('saving_throws');
+        $character->save();
+        return redirect()->route('character.show', $character);
     }
 
     /**

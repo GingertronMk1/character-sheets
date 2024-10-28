@@ -11,13 +11,15 @@ class Character extends Model
 {
     public static function boot() {
         parent::boot();
-        self::creating(function (self $model) {
-            $model->slug = Str::slug($model->name);
-            if (self::where('slug', $model->slug)->exists()) {
-                $i = 1;
-                do {
-                    $model->slug = Str::slug($model->name) . '-' . $i++;
-                } while (self::where('slug', $model->slug)->exists());
+        self::saving(function (self $model) {
+            if ($model->isDirty('name')) {
+                $model->slug = Str::slug($model->name);
+                if (self::where('slug', $model->slug)->exists()) {
+                    $i = 1;
+                    do {
+                        $model->slug = Str::slug($model->name) . '-' . $i++;
+                    } while (self::where('slug', $model->slug)->exists());
+                }
             }
         });
     }
@@ -95,7 +97,6 @@ class Character extends Model
                 'name' => $skill->getDisplayName(),
                 'ability' => $skill->getBaseAbility()->value,
                 'proficiencies' => 0,
-                'modifier' => $this->getSkillModifier($skill)
             ];
         }
 

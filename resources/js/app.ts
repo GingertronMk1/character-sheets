@@ -47,15 +47,15 @@ const setSkillModifier = function (node: Element) {
 
     const proficiencyBonusInput = document.querySelector('input[type=number][name=proficiency_bonus]');
     if (!(proficiencyBonusInput instanceof HTMLInputElement)) {
-        throw new Error('Proficiency bonus not an input')
+        throw new Error(`Proficiency bonus for ${skillName} not an input`)
     }
 
     const proficiencyBonus = proficiencyBonusInput.valueAsNumber;
 
-    const numberOfProficienciesInput = document.querySelector(`input[type=number][name=abilities\\[${skillName}\\]]`);
+    const numberOfProficienciesInput = document.querySelector(`input[type=number][name=skills\\[${skillName}\\]\\[proficiencies\\]]`);
     if (!(numberOfProficienciesInput instanceof HTMLInputElement)) {
-        throw new Error('Proficiency count not an input')
-    };
+        throw new Error(`Proficiency count for ${skillName} not an input`)
+    }
 
     const numberOfProficiencies = numberOfProficienciesInput.valueAsNumber;
 
@@ -108,3 +108,5 @@ document.querySelector('button#character-sheet-save')?.addEventListener('click',
     const formData = new FormData(form);
     console.table(Object.fromEntries(formData));
 })
+
+setAllSkillModifiers();

@@ -4,8 +4,11 @@
     'character' => new \App\Models\Character()
 ])
 
+@section('title')
+    {{ $character->name }}, the {{ $character->race }} {{ $character->class }}
+@endsection
+
 @section('content')
-    <button id="character-sheet-save">Save</button>
     <form
         id="character-sheet"
         class="character-sheet"
@@ -19,7 +22,7 @@
         @if($character->id)
             @method('PUT')
         @endif
-        <input type="submit" value="Create">
+        <input type="submit" value="{{ $character->id ? 'Update' : 'Create' }}">
         <div class="character-sheet__row">
             <input type="text" name="name" id="name" value="{{ $character->name }}" required placeholder="Character Name">
             <input type="text" name="class" id="class" value="{{ $character->class }}" required placeholder="Character Class">
