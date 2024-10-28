@@ -52,7 +52,7 @@ const setSkillModifier = function (node: Element) {
 
     const proficiencyBonus = proficiencyBonusInput.valueAsNumber;
 
-    const numberOfProficienciesInput = document.querySelector(`input[type=number][name=proficiencies\\.${skillName}]`);
+    const numberOfProficienciesInput = document.querySelector(`input[type=number][name=abilities\\.${skillName}]`);
     if (!(numberOfProficienciesInput instanceof HTMLInputElement)) {
         throw new Error('Proficiency count not an input')
     };

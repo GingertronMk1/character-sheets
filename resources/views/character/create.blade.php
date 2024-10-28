@@ -11,7 +11,7 @@
         <div class="character-sheet__column">
             <div class="character-sheet__block character-sheet__block--skills-and-proficiencies">
                 <h2>Skills and Proficiencies</h2>
-                <div class="character-sheet__proficiencies">
+                <div class="character-sheet__abilities">
                     @each('components.character.ability-score', $character->abilities, 'score')
                 </div>
                 <div class="character-sheet__skills">

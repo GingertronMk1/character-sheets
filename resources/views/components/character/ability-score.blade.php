@@ -1,5 +1,5 @@
 <label for="{{ $key }}">
-                        <span class="character-sheet__proficiency-name">
+                        <span class="character-sheet__ability-name">
                             {{ strtoupper(substr($key, 0, 3)) }}
                         </span>
     <input
