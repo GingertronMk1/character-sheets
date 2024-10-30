@@ -1,11 +1,19 @@
-<div class="character-sheet__saving-throw">
-    <span class="character-sheet__saving-throw-name">
+<div class="row align-items-center">
+    <span class="col-6">
         {{ ucfirst($key) }}
     </span>
-    <input type="number" min="0" max="5" name="saving_throws[{{ $key }}]" value="{{ $throw['proficiencies'] }}">
+    <span class="col-3">
+        <input
+            type="number"
+            min="0"
+            max="5"
+            name="saving_throws[{{ $key }}]"
+            value="{{ $throw['proficiencies'] }}"
+        >
+    </span>
 
     <span
-        class="character-sheet__saving-throw-modifier"
+        class="col-3 text-end"
         data-ability="{{ $key }}"
     >
         {{ $throw['value'] }}

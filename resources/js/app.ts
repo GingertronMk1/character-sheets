@@ -1,6 +1,15 @@
 import './bootstrap';
 
+import * as bootstrap from 'bootstrap';
+
 import '../scss/app.scss';
+
+/**
+ * Tooltips
+ */
+
+const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+[...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
 
 const plusOrMinus = function (n: number): string {
     let sign: string = '±';
@@ -80,7 +89,7 @@ const setInitiative = () => {
 const setAllSkillModifiers = () => {
     setInitiative();
     document
-        .querySelectorAll('.character-sheet__skill-score')
+        .querySelectorAll('[data-fill-with=skill-score]')
         .forEach(setSkillModifier)
 }
 

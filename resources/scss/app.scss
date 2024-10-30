@@ -1,8 +1,4 @@
-hr {
-    width: 100%;
-    border: 1px solid black;
-    margin: 0.1rem;
-}
+@import "bootstrap/scss/bootstrap";
 
 .character-sheet {
     width: 100%;
@@ -76,7 +72,7 @@ hr {
         }
     }
 
-    &__skill {
+    &__skill, &__saving-throw {
         display: flex;
         align-items: center;
 
@@ -91,14 +87,14 @@ hr {
         }
     }
 
-    &__skill-score {
+    &__skill-score, &__saving-throw-modifier {
         white-space: nowrap;
         min-width: 2rem;
         flex: 1;
         text-align: end;
     }
 
-    &__skill-name {
+    &__skill-name, &__saving-throw-name {
         width: 70%;
 
         & + input[type=number] {
@@ -120,6 +116,19 @@ hr {
         width: 100%;
     }
 
+    #character-info-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 1rem;
+
+        label {
+            font-size: 1.3rem;
+
+            input {
+                font-size: inherit;
+            }
+        }
+    }
 }
 
 small {

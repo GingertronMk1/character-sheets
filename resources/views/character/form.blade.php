@@ -11,7 +11,7 @@
 @section('content')
     <form
         id="character-sheet"
-        class="character-sheet"
+        class="container row"
         method="POST"
         action="{{
             $character->id
@@ -22,19 +22,33 @@
         @if($character->id)
             @method('PUT')
         @endif
-        <input type="submit" value="{{ $character->id ? 'Update' : 'Create' }}">
-        <div class="character-sheet__row">
-            <input type="text" name="name" id="name" value="{{ $character->name }}" required placeholder="Character Name">
-            <input type="text" name="class" id="class" value="{{ $character->class }}" required placeholder="Character Class">
-            <input type="text" name="race" id="race" value="{{ $character->race }}" required placeholder="Character Race">
+        <input class="btn btn-primary" type="submit" value="{{ $character->id ? 'Update' : 'Create' }}">
+        <div id="character-info-row" class="col-12 row">
+            <label for="name" class="col-4">
+                Name
+                <input type="text" name="name" id="name" value="{{ $character->name }}" required placeholder="Character Name">
+            </label>
+            <label for="class" class="col-4">
+                Class
+                <input type="text" name="class" id="class" value="{{ $character->class }}" required placeholder="Character Class">
+            </label>
+            <label for="race" class="col-4">
+                Race
+                <input type="text" name="race" id="race" value="{{ $character->race }}" required placeholder="Character Race">
+            </label>
         </div>
-        <div class="character-sheet__column">
-            <div class="character-sheet__block character-sheet__block--skills-and-proficiencies">
-                <h2>Skills and Proficiencies</h2>
-                <div class="character-sheet__abilities">
+        <div class="col-4">
+            <div class="card">
+                <div class="card-header">
+                    Skills and Proficiencies
+                </div>
+                <div class="card-body row">
+
+
+                <div class="character-sheet__abilities col-4">
                     @each('components.character.ability-score', $character->abilities, 'score')
                 </div>
-                <div class="character-sheet__skills">
+                <div class="character-sheet__skills col-8">
                     <label for="inspiration" class="character-sheet__inspiration">
                         <input type="hidden" name="inspiration" value="0">
                         Inspiration <input type="checkbox" name="inspiration" id="inspiration" value="1">
@@ -53,6 +67,8 @@
                     @each('components.character.saving-throw', $character->savingThrows, 'throw')
                     <hr />
                     @each('components.character.skill-score', $character->skills, 'details')
+
+                </div>
                 </div>
 
             </div>
@@ -63,7 +79,7 @@
                 Other Proficiencies
             </div>
         </div>
-        <div class="character-sheet__column">
+        <div class="col-4">
             <div class="character-sheet__block character-sheet__block--combat-stats">
                 <span class="character-sheet__armour-class">
                     <h6>Armour Class</h6>
@@ -85,7 +101,7 @@
                 Equipment
             </div>
         </div>
-        <div class="character-sheet__column">
+        <div class="col-4">
             <div class="character-sheet__block character-sheet__block--personality">
                 Personality
             </div>

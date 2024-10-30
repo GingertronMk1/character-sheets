@@ -14,8 +14,8 @@
         Jack's Character Sheet thing that he made for some reason
     </h1>
 </header>
-<div class="container">
+<main class="d-flex flex-column align-items-center">
     @yield('content')
-</div>
+</main>
 </body>
 </html>
