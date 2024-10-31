@@ -51,16 +51,13 @@ const getAbilityScore: number = (scoreName: string, proficiencies = 0) => {
       id="character-info-row"
       class="col-12 row"
     >
-
-        <div class="col-3 d-flex align-items-center justify-content-around">
-
-
+      <div class="col-3 d-flex align-items-center justify-content-around">
         <input
-            class="btn btn-primary"
-            type="submit"
-            :value="editCharacter.id ? 'Update' : 'Create'"
+          class="btn btn-primary"
+          type="submit"
+          :value="editCharacter.id ? 'Update' : 'Create'"
         >
-        </div>
+      </div>
       <label
         for="name"
         class="col-3 form-label"
@@ -124,13 +121,13 @@ const getAbilityScore: number = (scoreName: string, proficiencies = 0) => {
                 v-text="key.toString().slice(0,3).toUpperCase()"
               />
               <input
+                :id="key"
                 v-model="editCharacter.abilities[key]"
                 type="number"
                 :data-ability-score="key"
                 class="form-control"
                 min="0"
                 max="20"
-                :id="key"
               >
 
               <span
@@ -178,13 +175,13 @@ const getAbilityScore: number = (scoreName: string, proficiencies = 0) => {
               />
               <span class="col-4">
                 <input
+                  :id="`saving_throws[${key}]`"
                   v-model="editCharacter.saving_throws[key]"
                   type="number"
                   min="0"
                   max="5"
                   class="form-control"
                   :name="`saving_throws[${key}]`"
-                  :id="`saving_throws[${key}]`"
                 >
               </span>
 
@@ -209,13 +206,13 @@ const getAbilityScore: number = (scoreName: string, proficiencies = 0) => {
               />
               <span class="col-4">
                 <input
+                  :id="`skills[${key}][proficiencies]`"
                   v-model="editCharacter.skills[key].proficiencies"
                   type="number"
                   min="0"
                   max="5"
                   class="form-control"
                   :name="`skills[${key}][proficiencies]`"
-                  :id="`skills[${key}][proficiencies]`"
                 >
               </span>
 
@@ -237,17 +234,16 @@ const getAbilityScore: number = (scoreName: string, proficiencies = 0) => {
         <div class="card-header">
           Other Proficiencies
         </div>
-          <div class="card-body">
-
-        <textarea
-          id="other-proficiencies"
-          v-model="editCharacter.otherProficiencies"
-          name="other_proficiencies"
-          cols="30"
-          rows="10"
-          class="form-control border-0"
-        />
-          </div>
+        <div class="card-body">
+          <textarea
+            id="other-proficiencies"
+            v-model="editCharacter.otherProficiencies"
+            name="other_proficiencies"
+            cols="30"
+            rows="10"
+            class="form-control border-0"
+          />
+        </div>
       </div>
     </div>
     <div class="col-4">

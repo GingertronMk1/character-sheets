@@ -4,9 +4,9 @@
     "scripts": {
         "build": "vite build",
         "dev": "vite",
-        "lint": "eslint",
-        "lint:fix": "eslint --fix",
-        "lint:inspect": "eslint --inspect-config"
+        "lint": "eslint --stats",
+        "lint:fix": "npm run lint -- --fix",
+        "lint:inspect": "npm run lint -- --inspect-config"
     },
     "devDependencies": {
         "@eslint/js": "^9.13.0",
