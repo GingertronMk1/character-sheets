@@ -4,7 +4,9 @@
     "scripts": {
         "build": "vite build",
         "dev": "vite",
-        "lint": "eslint"
+        "lint": "eslint",
+        "lint:fix": "eslint --fix",
+        "lint:inspect": "eslint --inspect-config"
     },
     "devDependencies": {
         "@eslint/js": "^9.13.0",
@@ -28,6 +30,7 @@
         "typescript": "^5.6.3",
         "typescript-eslint": "^8.12.2",
         "vite": "^5.0",
+        "vue": "^3.5.12",
         "vue-eslint-parser": "^9.4.3"
     },
     "dependencies": {

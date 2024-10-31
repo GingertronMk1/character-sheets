@@ -1,5 +1,7 @@
 <script setup lang="ts">
 
+import {ref} from "vue";
+
 interface Character {
     id: number
     slug: string
@@ -20,9 +22,11 @@ interface Character {
     savingThrows: Array<string, number>
 }
 
-defineProps<{
+const props = defineProps<{
     character: Character
 }>()
+
+const editCharacter = ref<Character>(props.character);
 
 </script>
 
@@ -31,7 +35,7 @@ defineProps<{
     <input
       class="btn btn-primary"
       type="submit"
-      :value="character.id ? 'Update' : 'Create'"
+      :value="editCharacter.id ? 'Update' : 'Create'"
     >
     <div
       id="character-info-row"
@@ -44,7 +48,7 @@ defineProps<{
         Name
         <input
           id="name"
-          v-model="character.name"
+          v-model="editCharacter.name"
           type="text"
           name="name"
           required
@@ -59,7 +63,7 @@ defineProps<{
         Class
         <input
           id="class"
-          v-model="character.class"
+          v-model="editCharacter.class"
           type="text"
           name="class"
           required
@@ -74,7 +78,7 @@ defineProps<{
         Race
         <input
           id="race"
-          v-model="character.race"
+          v-model="editCharacter.race"
           type="text"
           name="race"
           required
@@ -90,7 +94,7 @@ defineProps<{
         </div>
         <div class="card-body row">
           <div class="character-sheet__abilities col-4">
-            @each('components.character.ability-score', $character->abilities, 'score')
+            @each('components.editCharacter.ability-score', $character->abilities, 'score')
           </div>
           <div class="character-sheet__skills col-8">
             <label
@@ -113,7 +117,7 @@ defineProps<{
               Proficiency Bonus:
               <input
                 id="proficiency_bonus"
-                v-model="character.proficiencyBonus"
+                v-model="editCharacter.proficiencyBonus"
                 type="number"
                 name="proficiency_bonus"
                 min="0"
@@ -122,13 +126,14 @@ defineProps<{
             </div>
             <hr>
             <div
-              v-for="(savingThrow, key) in character.saving_throws"
+              v-for="(savingThrow, key) in editCharacter.saving_throws"
               :key="JSON.stringify(savingThrow)"
               class="row align-items-center"
             >
-              <span class="col-6">
-                {{ key }}
-              </span>
+              <span
+                class="col-6"
+                v-text="key"
+              />
               <span class="col-3">
                 <input
                   v-model="savingThrow.proficiencies"
@@ -149,16 +154,17 @@ defineProps<{
             <hr>
 
             <div
-              v-for="(score, key) in character.skill_scores"
+              v-for="(score, key) in editCharacter.skill_scores"
               :key="key"
               class="row align-items-center"
               data-bs-toggle="tooltip"
               data-bs-placement="top"
               data-bs-title="{{ strtoupper(substr($details['ability'], 0, 3)) }}"
             >
-              <span class="col-6 text-truncate">
-                {{ score.name }}
-              </span>
+              <span
+                class="col-6 text-truncate"
+                v-text="score.name"
+              />
               <span class="col-3">
                 <input
                   v-model="score.proficiencies"
@@ -186,12 +192,12 @@ defineProps<{
                 :data-ability="score.ability"
               />
             </div>
-            @each('components.character.skill-score', $character->skills, 'details')
+            @each('components.editCharacter.skill-score', $character->skills, 'details')
           </div>
         </div>
       </div>
       <div class="card mt-3 p-3">
-        Passive Perception: {{ character.passivePerception }}
+        Passive Perception: {{ editCharacter.passivePerception }}
       </div>
       <div class="card mt-3">
         <div class="card-header">
@@ -199,15 +205,16 @@ defineProps<{
         </div>
         <textarea
           id="other-proficiencies"
+          v-model="editCharacter.otherProficiencies"
           name="other_proficiencies"
           cols="30"
           rows="10"
           class="card-body"
-        >{{ character.otherProficiencies }}</textarea>
+        />
       </div>
     </div>
     <div class="col-4">
-      @include('character.page1.column2', ['character' => $character])
+      @include('editCharacter.page1.column2', ['character' => $character])
     </div>
     <div class="col-4">
       <div class="character-sheet__block character-sheet__block--personality">
