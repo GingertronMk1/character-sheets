@@ -134,20 +134,21 @@ const getAbilityScore: number = (scoreName: string, proficiencies = 0) => {
               />
             </label>
           </div>
-          <div class="character-sheet__skills col-8">
+          <div class="character-sheet__skills col-8 form-check">
             <label
               for="inspiration"
-              class="character-sheet__inspiration"
+              class="form-check-label"
             >
               Inspiration <input
                 id="inspiration"
                 v-model="editCharacter.inspiration"
                 type="checkbox"
                 name="inspiration"
+                class="form-check-input"
                 value="1"
               >
             </label>
-            <div class="character-sheet__proficiency-bonus">
+            <label class="form-label">
               Proficiency Bonus:
               <input
                 id="proficiency_bonus"
@@ -156,8 +157,9 @@ const getAbilityScore: number = (scoreName: string, proficiencies = 0) => {
                 name="proficiency_bonus"
                 min="0"
                 max="10"
+                class="form-control"
               >
-            </div>
+            </label>
             <hr>
             <label
               v-for="(savingThrow, key) in editCharacter.saving_throws"
@@ -230,14 +232,17 @@ const getAbilityScore: number = (scoreName: string, proficiencies = 0) => {
         <div class="card-header">
           Other Proficiencies
         </div>
+          <div class="card-body">
+
         <textarea
           id="other-proficiencies"
           v-model="editCharacter.otherProficiencies"
           name="other_proficiencies"
           cols="30"
           rows="10"
-          class="card-body"
+          class="form-control border-0"
         />
+          </div>
       </div>
     </div>
     <div class="col-4">
