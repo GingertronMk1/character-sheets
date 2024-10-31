@@ -1,6 +1,7 @@
 <script setup lang="ts">
 
 import {ref} from "vue";
+import {capitaliseFirstLetter} from "../../helpers";
 
 interface Character {
     id: number
@@ -32,7 +33,15 @@ const props = defineProps<{
 
 const editCharacter = ref<Character>(props.character);
 
-const getAbilityScore: number = (scoreName: string) => Math.floor((editCharacter.value.abilities[scoreName] - 10) / 2);
+const getAbilityScore: number = (scoreName: string, proficiencies = 0) => {
+    const { value } = editCharacter;
+    const ability = value.abilities[scoreName];
+    const flooredAbility = Math.floor((ability - 10) / 2);
+    const proficiencyBonus = proficiencies * value.proficiency_bonus;
+    return flooredAbility + proficiencyBonus;
+}
+
+
 
 </script>
 
@@ -106,16 +115,17 @@ const getAbilityScore: number = (scoreName: string) => Math.floor((editCharacter
               for="{{ $key }}"
             >
               <span
-                class="character-sheet__ability-name"
+                class="form-label"
                 v-text="key.toString().slice(0,3).toUpperCase()"
               />
               <input
                 v-model="editCharacter.abilities[key]"
                 type="number"
                 :data-ability-score="key"
-                class="character-sheet__ability-score"
+                class="form-control"
                 min="0"
                 max="20"
+                :id="key"
               >
 
               <span
@@ -129,13 +139,9 @@ const getAbilityScore: number = (scoreName: string) => Math.floor((editCharacter
               for="inspiration"
               class="character-sheet__inspiration"
             >
-              <input
-                type="hidden"
-                name="inspiration"
-                value="0"
-              >
               Inspiration <input
                 id="inspiration"
+                v-model="editCharacter.inspiration"
                 type="checkbox"
                 name="inspiration"
                 value="1"
@@ -153,71 +159,67 @@ const getAbilityScore: number = (scoreName: string) => Math.floor((editCharacter
               >
             </div>
             <hr>
-            <div
+            <label
               v-for="(savingThrow, key) in editCharacter.saving_throws"
               :key="key"
               class="row align-items-center"
+              :for="`saving_throws[${key}]`"
             >
               <span
                 class="col-6"
-                v-text="key"
+                v-text="capitaliseFirstLetter(key)"
               />
-              <span class="col-3">
+              <span class="col-4">
                 <input
                   v-model="editCharacter.saving_throws[key]"
                   type="number"
                   min="0"
                   max="5"
+                  class="form-control"
                   :name="`saving_throws[${key}]`"
+                  :id="`saving_throws[${key}]`"
                 >
               </span>
 
               <span
-                class="col-3 text-end"
+                class="col-2 text-end"
                 :data-ability="key"
-                v-text="getAbilityScore(key) + (savingThrow * editCharacter.proficiency_bonus)"
+                v-text="getAbilityScore(key, savingThrow)"
               />
-            </div>
+            </label>
             <hr>
 
-            <div
+            <label
               v-for="(score, key) in editCharacter.skills"
               :key="key"
               :title="score.ability.slice(0,3).toUpperCase()"
               class="row align-items-center"
+              :for="`skills[${key}][proficiencies]`"
             >
               <span
                 class="col-6 text-truncate"
                 v-text="score.name"
               />
-              <span class="col-3">
+              <span class="col-4">
                 <input
                   v-model="editCharacter.skills[key].proficiencies"
                   type="number"
                   min="0"
                   max="5"
+                  class="form-control"
                   :name="`skills[${key}][proficiencies]`"
+                  :id="`skills[${key}][proficiencies]`"
                 >
               </span>
-              <input
-                type="hidden"
-                name="skills[{{ $key }}][name]"
-                value="{{ $details['name'] }}"
-              >
-              <input
-                type="hidden"
-                name="skills[{{ $key }}][ability]"
-                value="{{ $details['ability'] }}"
-              >
 
               <span
-                class="col-3 text-end"
+                class="col-2 text-end"
                 data-fill-with="skill-score"
                 :data-skill="key"
                 :data-ability="score.ability"
-                v-text="getAbilityScore(score.ability) + (score.proficiencies * editCharacter.proficiency_bonus)"
+                v-text="getAbilityScore(score.ability, score.proficiencies)"
               />
-            </div>
+            </label>
           </div>
         </div>
       </div>
