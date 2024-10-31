@@ -47,18 +47,23 @@ const getAbilityScore: number = (scoreName: string, proficiencies = 0) => {
 
 <template>
   <div class="container row">
-    <input
-      class="btn btn-primary"
-      type="submit"
-      :value="editCharacter.id ? 'Update' : 'Create'"
-    >
     <div
       id="character-info-row"
       class="col-12 row"
     >
+
+        <div class="col-3 d-flex align-items-center justify-content-around">
+
+
+        <input
+            class="btn btn-primary"
+            type="submit"
+            :value="editCharacter.id ? 'Update' : 'Create'"
+        >
+        </div>
       <label
         for="name"
-        class="col-4 form-label"
+        class="col-3 form-label"
       >
         Name
         <input
@@ -73,7 +78,7 @@ const getAbilityScore: number = (scoreName: string, proficiencies = 0) => {
       </label>
       <label
         for="class"
-        class="col-4 form-label"
+        class="col-3 form-label"
       >
         Class
         <input
@@ -88,7 +93,7 @@ const getAbilityScore: number = (scoreName: string, proficiencies = 0) => {
       </label>
       <label
         for="race"
-        class="col-4 form-label"
+        class="col-3 form-label"
       >
         Race
         <input
