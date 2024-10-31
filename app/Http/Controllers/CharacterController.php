@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreCharacterRequest;
 use App\Http\Requests\UpdateCharacterRequest;
 use App\Models\Character;
+use Inertia\Inertia;
 
 class CharacterController extends Controller
 {
@@ -42,6 +43,7 @@ class CharacterController extends Controller
      */
     public function show(Character $character)
     {
+        return Inertia::render('Character/Form', ['character' => $character]);
         return view('character.form', ['character' => $character]);
     }
 

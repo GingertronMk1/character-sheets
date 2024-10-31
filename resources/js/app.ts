@@ -12,7 +12,7 @@ const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]
 [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
 
 const plusOrMinus = function (n: number): string {
-    let sign: string = '±';
+    let sign = '±';
     switch(Math.sign(n)) {
         case -1: sign = '-'; break;
         case 1: sign = '+'; break;
