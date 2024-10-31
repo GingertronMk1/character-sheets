@@ -30,6 +30,6 @@ createInertiaApp({
  * Tooltips
  */
 
-const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
-[...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
-
+document
+    .querySelectorAll('[data-bs-toggle=tooltip]')
+    .forEach((tooltipTriggerEl) => new bootstrap.Tooltip(tooltipTriggerEl));

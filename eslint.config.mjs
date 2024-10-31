@@ -24,11 +24,14 @@ export default tseslint.config({
             }
     },
     files: [
-        'resources/js/**/*.{ts,js,vue}'
+        'resources/ts/**/*.{ts,ts,vue}'
     ],
     ignores: [
         'node_modules/',
         'vendor/'
     ],
+    rules: {
+        'vue/multi-word-component-names': 'off'
+    }
 })
 ;

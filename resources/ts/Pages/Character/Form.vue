@@ -7,19 +7,23 @@ interface Character {
     slug: string
     level: number
     class: string
-    classExtra?: string
+    class_extra?: string
     race: string
-    raceExtra?: string
-    armourClass: number
-    proficiencyBonus: number
+    race_extra?: string
+    armour_class: number
+    proficiency_bonus: number
     speed: number
     inspiration: boolean
-    passivePerception: number
-    weapons: any[]
-    armours: any[]
-    abilities: any[]
-    skills: any[]
-    savingThrows: Array<string, number>
+    passive_perception: number
+    weapons: string[]
+    armours: string[]
+    abilities: number[]
+    skills: Array<string, {
+        ability: string
+        name: string
+        proficiencies: number
+    }>
+    saving_throws: Array<string, number>
 }
 
 const props = defineProps<{
@@ -27,6 +31,8 @@ const props = defineProps<{
 }>()
 
 const editCharacter = ref<Character>(props.character);
+
+const getAbilityScore: number = (scoreName: string) => Math.floor((editCharacter.value.abilities[scoreName] - 10) / 2);
 
 </script>
 
@@ -94,7 +100,29 @@ const editCharacter = ref<Character>(props.character);
         </div>
         <div class="card-body row">
           <div class="character-sheet__abilities col-4">
-            @each('components.editCharacter.ability-score', $character->abilities, 'score')
+            <label
+              v-for="(ability, key) in character.abilities"
+              :key="key"
+              for="{{ $key }}"
+            >
+              <span
+                class="character-sheet__ability-name"
+                v-text="key.toString().slice(0,3).toUpperCase()"
+              />
+              <input
+                v-model="editCharacter.abilities[key]"
+                type="number"
+                :data-ability-score="key"
+                class="character-sheet__ability-score"
+                min="0"
+                max="20"
+              >
+
+              <span
+                id="{{ $key }}--modifier"
+                v-text="getAbilityScore(key)"
+              />
+            </label>
           </div>
           <div class="character-sheet__skills col-8">
             <label
@@ -117,7 +145,7 @@ const editCharacter = ref<Character>(props.character);
               Proficiency Bonus:
               <input
                 id="proficiency_bonus"
-                v-model="editCharacter.proficiencyBonus"
+                v-model="editCharacter.proficiency_bonus"
                 type="number"
                 name="proficiency_bonus"
                 min="0"
@@ -127,7 +155,7 @@ const editCharacter = ref<Character>(props.character);
             <hr>
             <div
               v-for="(savingThrow, key) in editCharacter.saving_throws"
-              :key="JSON.stringify(savingThrow)"
+              :key="key"
               class="row align-items-center"
             >
               <span
@@ -136,7 +164,7 @@ const editCharacter = ref<Character>(props.character);
               />
               <span class="col-3">
                 <input
-                  v-model="savingThrow.proficiencies"
+                  v-model="editCharacter.saving_throws[key]"
                   type="number"
                   min="0"
                   max="5"
@@ -147,19 +175,16 @@ const editCharacter = ref<Character>(props.character);
               <span
                 class="col-3 text-end"
                 :data-ability="key"
-              >
-                {{ savingThrow.value }}
-              </span>
+                v-text="getAbilityScore(key) + (savingThrow * editCharacter.proficiency_bonus)"
+              />
             </div>
             <hr>
 
             <div
-              v-for="(score, key) in editCharacter.skill_scores"
+              v-for="(score, key) in editCharacter.skills"
               :key="key"
+              :title="score.ability.slice(0,3).toUpperCase()"
               class="row align-items-center"
-              data-bs-toggle="tooltip"
-              data-bs-placement="top"
-              data-bs-title="{{ strtoupper(substr($details['ability'], 0, 3)) }}"
             >
               <span
                 class="col-6 text-truncate"
@@ -167,7 +192,7 @@ const editCharacter = ref<Character>(props.character);
               />
               <span class="col-3">
                 <input
-                  v-model="score.proficiencies"
+                  v-model="editCharacter.skills[key].proficiencies"
                   type="number"
                   min="0"
                   max="5"
@@ -190,9 +215,9 @@ const editCharacter = ref<Character>(props.character);
                 data-fill-with="skill-score"
                 :data-skill="key"
                 :data-ability="score.ability"
+                v-text="getAbilityScore(score.ability) + (score.proficiencies * editCharacter.proficiency_bonus)"
               />
             </div>
-            @each('components.editCharacter.skill-score', $character->skills, 'details')
           </div>
         </div>
       </div>
