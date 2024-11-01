@@ -4,7 +4,6 @@ import eslint from '@eslint/js';
 import tseslint from 'typescript-eslint';
 import vueParser from 'vue-eslint-parser';
 import pluginVue from 'eslint-plugin-vue';
-import eslintPluginPrettier from "eslint-plugin-prettier";
 
 export default tseslint.config({
     extends: [
@@ -13,9 +12,6 @@ export default tseslint.config({
         ...tseslint.configs.stylistic,
         ...pluginVue.configs['flat/recommended'],
     ],
-    plugins: {
-        prettier: eslintPluginPrettier
-    },
     languageOptions: {
         parser: vueParser,
         parserOptions:
@@ -27,7 +23,7 @@ export default tseslint.config({
             }
     },
     files: [
-        'resources/ts/**/*.{ts,ts,vue}'
+        'resources/**/*.{ts,ts,vue}'
     ],
     ignores: [
         'node_modules/',

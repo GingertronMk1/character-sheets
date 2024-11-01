@@ -1,38 +1,20 @@
 <script setup lang="ts">
 
-import {ref} from "vue";
 import {shortenAbilityName} from "../../helpers";
 import {Head, useForm} from "@inertiajs/vue3";
+import {Character} from "../../types";
 
-interface Character {
-    id: number
-    slug: string
-    level: number
-    class: string
-    class_extra?: string
-    race: string
-    race_extra?: string
-    armour_class: number
-    proficiency_bonus: number
-    speed: number
-    inspiration: boolean
-    passive_perception: number
-    weapons: string[]
-    armours: string[]
-    abilities: number[]
-    skills: Array<string, {
-        ability: string
-        name: string
-        proficiencies: number
-    }>
-    saving_throws: Array<string, number>
-}
 
 const props = defineProps<{
     character: Character
 }>()
 
-const characterForm = useForm<Character>(props.character);
+const modifyPropCharacter = (char: Character): Character => ({
+    ...char,
+    weapons: [...char.weapons, {}]
+})
+
+const characterForm = useForm<Character>(modifyPropCharacter(props.character));
 
 const getAbilityScore: number = (scoreName: string, proficiencies = 0) => {
     const value = characterForm;
@@ -44,6 +26,10 @@ const getAbilityScore: number = (scoreName: string, proficiencies = 0) => {
 
 const update = () => {
     console.log(JSON.parse(JSON.stringify(characterForm)))
+    characterForm.transform((char: Character) => ({
+        ...char,
+        weapons: char.weapons.filter(({ name }: Weapon) => !name)
+    }))
     if (characterForm.id) {
         characterForm.submit(
             'put',
@@ -120,7 +106,10 @@ const update = () => {
         <div class="card-header">
           Ability Scores
         </div>
-        <div class="card-body row" v-if="character.abilities">
+        <div
+          v-if="character.abilities"
+          class="card-body row"
+        >
           <label
             v-for="(key, index) in Object.keys(character.abilities)"
             :key="index"
@@ -293,8 +282,77 @@ const update = () => {
         </div>
       </div>
     </div>
+    <!-- COLUMN 2 -->
     <div class="col-4">
-      @include('characterForm.page1.column2', ['character' => $character])
+      <div class="card">
+        <div class="card-header">
+          Weapons
+        </div>
+        <div class="list-group list-group-flush">
+          <div
+            v-for="key in characterForm.weapons.keys()"
+            :key="key"
+            class="list-group-item"
+          >
+            <div class="row">
+              <div class="col-9">
+                <input
+                  v-model="characterForm.weapons[key].name"
+                  type="text"
+                  class="form-control col-3"
+                  placeholder="Name"
+                >
+              </div>
+              <label
+                :for="`weapons-${key}-expand`"
+                class="col-3 text-end my-auto"
+              >
+                <span v-text="characterForm.weapons[key].expand ? 'Hide' : 'Show'" />
+                <input
+                  :id="`weapons-${key}-expand`"
+                  class="d-none"
+                  type="checkbox"
+                  :checked="characterForm.weapons[key].expand"
+                  @input="characterForm.weapons[key].expand = $event.target.checked"
+                ></label>
+              <template v-if="characterForm.weapons[key].expand">
+                <div class="col-12 mt-2">
+                  <input
+                    v-model="characterForm.weapons[key].damage"
+                    type="text"
+                    class="form-control col-3"
+                    placeholder="Damage"
+                  >
+                </div>
+                <div class="col-12 mt-2">
+                  <input
+                    v-model="characterForm.weapons[key].properties"
+                    type="text"
+                    class="form-control col-3"
+                    placeholder="Properties"
+                  >
+                </div>
+                <div class="col-12 mt-2">
+                  <input
+                    v-model="characterForm.weapons[key].mastery"
+                    type="text"
+                    class="form-control"
+                    placeholder="Mastery"
+                  >
+                </div>
+              </template>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <button
+            class="btn btn-primary"
+            @click="characterForm.weapons.push({})"
+          >
+            Add Weapon
+          </button>
+        </div>
+      </div>
     </div>
     <div class="col-4">
       <div class="character-sheet__block character-sheet__block--personality">

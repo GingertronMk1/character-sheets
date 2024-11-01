@@ -4,6 +4,8 @@ namespace App;
 
 enum Ability: string
 {
+    use StringEnumTrait;
+
     case STRENGTH = 'strength';
     case DEXTERITY = 'dexterity';
     case CONSTITUTION = 'constitution';

@@ -4,6 +4,7 @@ namespace App;
 
 enum Skill: string
 {
+    use StringEnumTrait;
     case ACROBATICS = 'acrobatics'; // DEX
     case ANIMAL_HANDLING = 'animal_handling'; // WIS
     case ARCANA = 'arcana'; // INT

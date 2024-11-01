@@ -4,7 +4,7 @@
     "scripts": {
         "build": "vite build",
         "dev": "vite",
-        "lint": "eslint --stats",
+        "lint": "eslint --stats resources",
         "lint:fix": "npm run lint -- --fix",
         "lint:inspect": "npm run lint -- --inspect-config"
     },
@@ -37,6 +37,7 @@
         "@inertiajs/vue3": "^1.2.0",
         "@popperjs/core": "^2.11.8",
         "@types/bootstrap": "^5.2.10",
-        "bootstrap": "^5.3.3"
+        "bootstrap": "^5.3.3",
+        "vite-plugin-eslint": "^1.8.1"
     }
 }
