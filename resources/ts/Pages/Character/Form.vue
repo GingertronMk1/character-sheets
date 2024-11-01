@@ -190,7 +190,8 @@ const getAbilityScore: number = (scoreName: string, proficiencies = 0) => {
               <label
                 class="form-check-label"
                 for="flexSwitchCheckDefault"
-              >Inspiration</label>
+                v-text="'Inspiration'"
+              />
             </div>
           </div>
 
