@@ -1,1 +1,1 @@
-export const capitaliseFirstLetter = (val: string) => String(val).charAt(0).toUpperCase() + String(val).slice(1);
+export const shortenAbilityName = (val: string) => String(val).slice(0, 3).toUpperCase();

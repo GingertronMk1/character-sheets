@@ -1,7 +1,7 @@
 <script setup lang="ts">
 
 import {ref} from "vue";
-import {capitaliseFirstLetter} from "../../helpers";
+import {shortenAbilityName} from "../../helpers";
 
 interface Character {
     id: number
@@ -40,8 +40,6 @@ const getAbilityScore: number = (scoreName: string, proficiencies = 0) => {
     const proficiencyBonus = proficiencies * value.proficiency_bonus;
     return flooredAbility + proficiencyBonus;
 }
-
-
 
 </script>
 
@@ -105,73 +103,54 @@ const getAbilityScore: number = (scoreName: string, proficiencies = 0) => {
       </label>
     </div>
     <div class="col-4">
-      <div class="card">
+      <div class="card mb-3">
         <div class="card-header">
-          Skills and Proficiencies
+          Ability Scores
         </div>
         <div class="card-body row">
-          <div class="character-sheet__abilities col-4">
-            <label
-              v-for="(ability, key) in character.abilities"
-              :key="key"
-              for="{{ $key }}"
+          <label
+            v-for="(key, index) in Object.keys(character.abilities)"
+            :key="index"
+            :for="key"
+            class="col-4 text-center"
+          >
+            <span
+              class="form-label"
+              v-text="shortenAbilityName(key)"
+            />
+            <input
+              :id="key"
+              v-model="editCharacter.abilities[key]"
+              type="number"
+              :data-ability-score="key"
+              class="form-control"
+              min="0"
+              max="20"
             >
-              <span
-                class="form-label"
-                v-text="key.toString().slice(0,3).toUpperCase()"
-              />
-              <input
-                :id="key"
-                v-model="editCharacter.abilities[key]"
-                type="number"
-                :data-ability-score="key"
-                class="form-control"
-                min="0"
-                max="20"
-              >
+
+            <span
+              :id="`${key}--modifier`"
+              v-text="getAbilityScore(key)"
+            />
+          </label>
+        </div>
+      </div>
+      <div class="card mb-3">
+        <div class="card-header">
+          Saving Throws
+        </div>
+        <div class="list-group list-group-flush">
+          <label
+            v-for="(savingThrow, key) in editCharacter.saving_throws"
+            :key="key"
+            class="list-group-item"
+            :for="`saving_throws[${key}]`"
+          >
+            <span class="row d-flex flex-row align-items-center">
 
               <span
-                id="{{ $key }}--modifier"
-                v-text="getAbilityScore(key)"
-              />
-            </label>
-          </div>
-          <div class="character-sheet__skills col-8 form-check">
-            <label
-              for="inspiration"
-              class="form-check-label"
-            >
-              Inspiration <input
-                id="inspiration"
-                v-model="editCharacter.inspiration"
-                type="checkbox"
-                name="inspiration"
-                class="form-check-input"
-                value="1"
-              >
-            </label>
-            <label class="form-label">
-              Proficiency Bonus:
-              <input
-                id="proficiency_bonus"
-                v-model="editCharacter.proficiency_bonus"
-                type="number"
-                name="proficiency_bonus"
-                min="0"
-                max="10"
-                class="form-control"
-              >
-            </label>
-            <hr>
-            <label
-              v-for="(savingThrow, key) in editCharacter.saving_throws"
-              :key="key"
-              class="row align-items-center"
-              :for="`saving_throws[${key}]`"
-            >
-              <span
                 class="col-6"
-                v-text="capitaliseFirstLetter(key)"
+                v-text="shortenAbilityName(key)"
               />
               <span class="col-4">
                 <input
@@ -190,16 +169,65 @@ const getAbilityScore: number = (scoreName: string, proficiencies = 0) => {
                 :data-ability="key"
                 v-text="getAbilityScore(key, savingThrow)"
               />
-            </label>
-            <hr>
+            </span>
+          </label>
+        </div>
+      </div>
+      <div class="card mb-3">
+        <div class="card-header">
+          Inspiration and Proficiency
+        </div>
+        <div class="card-body row">
+          <div class="col-6 d-flex justify-content-center align-items-center">
+            <div class="form-check form-switch">
+              <input
+                id="flexSwitchCheckDefault"
+                v-model="editCharacter.inspiration"
+                class="form-check-input"
+                type="checkbox"
+                role="switch"
+              >
+              <label
+                class="form-check-label"
+                for="flexSwitchCheckDefault"
+              >Inspiration</label>
+            </div>
+          </div>
 
+          <div class=" col-6 d-flex align-items-center">
             <label
-              v-for="(score, key) in editCharacter.skills"
-              :key="key"
-              :title="score.ability.slice(0,3).toUpperCase()"
-              class="row align-items-center"
-              :for="`skills[${key}][proficiencies]`"
+              class="form-label"
+              for="proficiency_bonus"
             >
+              Proficiency Bonus:
+              <input
+                id="proficiency_bonus"
+                v-model="editCharacter.proficiency_bonus"
+                type="number"
+                name="proficiency_bonus"
+                min="0"
+                max="10"
+                class="form-control"
+              >
+            </label>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="card mb-3">
+        <div class="card-header">
+          Skills
+        </div>
+        <div class="list-group list-group-flush">
+          <label
+            v-for="(score, key) in editCharacter.skills"
+            :key="key"
+            :title="shortenAbilityName(score.ability)"
+            class="list-group-item"
+            :for="`skills[${key}][proficiencies]`"
+          >
+            <span class="row align-items-center">
               <span
                 class="col-6 text-truncate"
                 v-text="score.name"
@@ -223,10 +251,11 @@ const getAbilityScore: number = (scoreName: string, proficiencies = 0) => {
                 :data-ability="score.ability"
                 v-text="getAbilityScore(score.ability, score.proficiencies)"
               />
-            </label>
-          </div>
+            </span>
+          </label>
         </div>
       </div>
+
       <div class="card mt-3 p-3">
         Passive Perception: {{ editCharacter.passivePerception }}
       </div>
