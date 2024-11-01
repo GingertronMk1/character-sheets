@@ -2,6 +2,7 @@
 
 import {ref} from "vue";
 import {shortenAbilityName} from "../../helpers";
+import {Head, useForm} from "@inertiajs/vue3";
 
 interface Character {
     id: number
@@ -31,19 +32,30 @@ const props = defineProps<{
     character: Character
 }>()
 
-const editCharacter = ref<Character>(props.character);
+const characterForm = useForm<Character>(props.character);
 
 const getAbilityScore: number = (scoreName: string, proficiencies = 0) => {
-    const { value } = editCharacter;
+    const value = characterForm;
     const ability = value.abilities[scoreName];
     const flooredAbility = Math.floor((ability - 10) / 2);
     const proficiencyBonus = proficiencies * value.proficiency_bonus;
     return flooredAbility + proficiencyBonus;
 }
 
+const update = () => {
+    console.log(JSON.parse(JSON.stringify(characterForm)))
+    if (characterForm.id) {
+        characterForm.submit(
+            'put',
+            route('character.update', {character: characterForm.slug})
+        )
+    }
+}
+
 </script>
 
 <template>
+  <Head :title="`${character.name}, the ${character.race} ${character.class}`" />
   <div class="container row">
     <div
       id="character-info-row"
@@ -53,7 +65,8 @@ const getAbilityScore: number = (scoreName: string, proficiencies = 0) => {
         <input
           class="btn btn-primary"
           type="submit"
-          :value="editCharacter.id ? 'Update' : 'Create'"
+          :value="characterForm.id ? 'Update' : 'Create'"
+          @click.prevent="update"
         >
       </div>
       <label
@@ -63,7 +76,7 @@ const getAbilityScore: number = (scoreName: string, proficiencies = 0) => {
         Name
         <input
           id="name"
-          v-model="editCharacter.name"
+          v-model="characterForm.name"
           type="text"
           name="name"
           required
@@ -78,7 +91,7 @@ const getAbilityScore: number = (scoreName: string, proficiencies = 0) => {
         Class
         <input
           id="class"
-          v-model="editCharacter.class"
+          v-model="characterForm.class"
           type="text"
           name="class"
           required
@@ -93,7 +106,7 @@ const getAbilityScore: number = (scoreName: string, proficiencies = 0) => {
         Race
         <input
           id="race"
-          v-model="editCharacter.race"
+          v-model="characterForm.race"
           type="text"
           name="race"
           required
@@ -120,7 +133,7 @@ const getAbilityScore: number = (scoreName: string, proficiencies = 0) => {
             />
             <input
               :id="key"
-              v-model="editCharacter.abilities[key]"
+              v-model="characterForm.abilities[key]"
               type="number"
               :data-ability-score="key"
               class="form-control"
@@ -141,7 +154,7 @@ const getAbilityScore: number = (scoreName: string, proficiencies = 0) => {
         </div>
         <div class="list-group list-group-flush">
           <label
-            v-for="(savingThrow, key) in editCharacter.saving_throws"
+            v-for="(savingThrow, key) in characterForm.saving_throws"
             :key="key"
             class="list-group-item"
             :for="`saving_throws[${key}]`"
@@ -155,7 +168,7 @@ const getAbilityScore: number = (scoreName: string, proficiencies = 0) => {
               <span class="col-4">
                 <input
                   :id="`saving_throws[${key}]`"
-                  v-model="editCharacter.saving_throws[key]"
+                  v-model="characterForm.saving_throws[key]"
                   type="number"
                   min="0"
                   max="5"
@@ -182,7 +195,7 @@ const getAbilityScore: number = (scoreName: string, proficiencies = 0) => {
             <div class="form-check form-switch">
               <input
                 id="flexSwitchCheckDefault"
-                v-model="editCharacter.inspiration"
+                v-model="characterForm.inspiration"
                 class="form-check-input"
                 type="checkbox"
                 role="switch"
@@ -203,7 +216,7 @@ const getAbilityScore: number = (scoreName: string, proficiencies = 0) => {
               Proficiency Bonus:
               <input
                 id="proficiency_bonus"
-                v-model="editCharacter.proficiency_bonus"
+                v-model="characterForm.proficiency_bonus"
                 type="number"
                 name="proficiency_bonus"
                 min="0"
@@ -215,28 +228,32 @@ const getAbilityScore: number = (scoreName: string, proficiencies = 0) => {
         </div>
       </div>
 
-
       <div class="card mb-3">
         <div class="card-header">
           Skills
         </div>
         <div class="list-group list-group-flush">
           <label
-            v-for="(score, key) in editCharacter.skills"
+            v-for="(score, key) in characterForm.skills"
             :key="key"
-            :title="shortenAbilityName(score.ability)"
             class="list-group-item"
             :for="`skills[${key}][proficiencies]`"
+            :title="shortenAbilityName(score.ability)"
           >
             <span class="row align-items-center">
               <span
                 class="col-6 text-truncate"
-                v-text="score.name"
-              />
+              >
+                <span v-text="score.name" />
+                <small
+                  class="mb-auto ms-1"
+                  v-text="shortenAbilityName(score.ability)"
+                />
+              </span>
               <span class="col-4">
                 <input
                   :id="`skills[${key}][proficiencies]`"
-                  v-model="editCharacter.skills[key].proficiencies"
+                  v-model="characterForm.skills[key].proficiencies"
                   type="number"
                   min="0"
                   max="5"
@@ -258,7 +275,7 @@ const getAbilityScore: number = (scoreName: string, proficiencies = 0) => {
       </div>
 
       <div class="card mt-3 p-3">
-        Passive Perception: {{ editCharacter.passivePerception }}
+        Passive Perception: {{ characterForm.passivePerception }}
       </div>
       <div class="card mt-3">
         <div class="card-header">
@@ -267,7 +284,7 @@ const getAbilityScore: number = (scoreName: string, proficiencies = 0) => {
         <div class="card-body">
           <textarea
             id="other-proficiencies"
-            v-model="editCharacter.otherProficiencies"
+            v-model="characterForm.otherProficiencies"
             name="other_proficiencies"
             cols="30"
             rows="10"
@@ -277,7 +294,7 @@ const getAbilityScore: number = (scoreName: string, proficiencies = 0) => {
       </div>
     </div>
     <div class="col-4">
-      @include('editCharacter.page1.column2', ['character' => $character])
+      @include('characterForm.page1.column2', ['character' => $character])
     </div>
     <div class="col-4">
       <div class="character-sheet__block character-sheet__block--personality">

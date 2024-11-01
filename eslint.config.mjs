@@ -12,8 +12,10 @@ export default tseslint.config({
         ...tseslint.configs.strict,
         ...tseslint.configs.stylistic,
         ...pluginVue.configs['flat/recommended'],
-        eslintPluginPrettier
     ],
+    plugins: {
+        prettier: eslintPluginPrettier
+    },
     languageOptions: {
         parser: vueParser,
         parserOptions:
@@ -34,5 +36,4 @@ export default tseslint.config({
     rules: {
         'vue/multi-word-component-names': 'off',
     }
-})
-;
+});
