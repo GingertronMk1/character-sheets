@@ -120,7 +120,7 @@ const update = () => {
         <div class="card-header">
           Ability Scores
         </div>
-        <div class="card-body row">
+        <div class="card-body row" v-if="character.abilities">
           <label
             v-for="(key, index) in Object.keys(character.abilities)"
             :key="index"

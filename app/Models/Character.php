@@ -9,7 +9,8 @@ use Illuminate\Support\Str;
 
 class Character extends Model
 {
-    public static function boot() {
+    public static function boot()
+    {
         parent::boot();
         self::saving(function (self $model) {
             if ($model->isDirty('name')) {
@@ -53,6 +54,12 @@ class Character extends Model
         'race' => 'Test'
     ];
 
+    protected $appends = [
+        'abilities',
+        'skills',
+        'saving_throws'
+    ];
+
     public function getAbilitiesAttribute(?string $value)
     {
         if (!is_null($value)) {
@@ -61,7 +68,7 @@ class Character extends Model
 
         $ret = [];
 
-        foreach(Ability::cases() as $ability) {
+        foreach (Ability::cases() as $ability) {
             $ret[$ability->value] = 10;
         }
 
@@ -75,11 +82,8 @@ class Character extends Model
         }
 
         $ret = [];
-        foreach(Ability::cases() as $ability) {
-            $ret[$ability->value] = [
-                'value' => $this->getAbilityModifier($ability),
-                'proficiencies' => 0,
-            ];
+        foreach (Ability::cases() as $ability) {
+            $ret[$ability->value] = 0;
         }
 
         return $ret;

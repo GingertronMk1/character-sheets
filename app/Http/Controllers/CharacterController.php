@@ -22,7 +22,10 @@ class CharacterController extends Controller
      */
     public function create()
     {
-        return view('character.form');
+        return Inertia::render(
+            'Character/Form',
+            ['character' => new Character()]
+        );
     }
 
     /**
@@ -44,15 +47,6 @@ class CharacterController extends Controller
     public function show(Character $character)
     {
         return Inertia::render('Character/Form', ['character' => $character]);
-        return view('character.form', ['character' => $character]);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Character $character)
-    {
-        //
     }
 
     /**
