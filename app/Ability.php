@@ -12,4 +12,5 @@ enum Ability: string
     case INTELLIGENCE = 'intelligence';
     case WISDOM = 'wisdom';
     case CHARISMA = 'charisma';
+
 }

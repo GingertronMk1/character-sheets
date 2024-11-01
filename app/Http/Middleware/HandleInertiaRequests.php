@@ -39,7 +39,7 @@ class HandleInertiaRequests extends Middleware
     {
         return array_merge(parent::share($request), [
             'abilities' => Ability::casesWithValues(),
-            'skills' => Skill::casesWithValues(),
+            'skills' => Skill::getAllSkillsWithBaseAbilities()
         ]);
     }
 }

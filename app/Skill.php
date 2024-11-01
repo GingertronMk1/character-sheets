@@ -40,17 +40,17 @@ enum Skill: string
         };
     }
 
-    public function getDisplayName(): string
+    public static function getAllSkillsWithBaseAbilities(): array
     {
-        return implode(
-            ' ',
-            array_map(
-                ucfirst(...),
-                preg_split(
-                    '/[^a-zA-Z0-9]/',
-                    $this->value
-                )
-            )
-        );
+        $returnVal = [];
+
+        foreach (self::casesWithValues() as $key => $value) {
+            $returnVal[$key] = [
+                'name' => $value,
+                'base' => self::from($value)->getBaseAbility()
+            ];
+        }
+
+        return $returnVal;
     }
 }

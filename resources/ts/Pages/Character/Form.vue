@@ -1,7 +1,7 @@
 <script setup lang="ts">
 
 import {shortenAbilityName} from "../../helpers";
-import {Head, useForm} from "@inertiajs/vue3";
+import {Head, useForm, usePage} from "@inertiajs/vue3";
 import {Character} from "../../types";
 
 
@@ -9,10 +9,26 @@ const props = defineProps<{
     character: Character
 }>()
 
-const modifyPropCharacter = (char: Character): Character => ({
-    ...char,
-    weapons: [...char.weapons, {}]
-})
+const { props: { abilities, skills } } = usePage();
+
+const modifyPropCharacter = function (char: Character): Character {
+    Object.values(abilities).forEach(function (ability) {
+        char.abilities[ability] ??= 10;
+    })
+
+    Object.values(skills).forEach(function ({ name, base }) {
+        char.skills[name] ??= {
+            proficiencies: 0,
+            ability: base
+        }
+    })
+
+    return {
+        ...char,
+        weapons: [...char.weapons, {}]
+    }
+}
+
 
 const characterForm = useForm<Character>(modifyPropCharacter(props.character));
 
@@ -37,6 +53,7 @@ const update = () => {
         )
     }
 }
+
 
 </script>
 
@@ -111,7 +128,7 @@ const update = () => {
           class="card-body row"
         >
           <label
-            v-for="(key, index) in Object.keys(character.abilities)"
+            v-for="(key, index) in abilities"
             :key="index"
             :for="key"
             class="col-4 text-center"
@@ -223,7 +240,7 @@ const update = () => {
         </div>
         <div class="list-group list-group-flush">
           <label
-            v-for="(score, key) in characterForm.skills"
+            v-for="(score, key) in skills"
             :key="key"
             class="list-group-item"
             :for="`skills[${key}][proficiencies]`"

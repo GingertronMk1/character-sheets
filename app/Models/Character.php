@@ -2,8 +2,6 @@
 
 namespace App\Models;
 
-use App\Ability;
-use App\Skill;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
@@ -40,98 +38,28 @@ class Character extends Model
     ];
 
     protected $attributes = [
-        'level' => 1,
-        'weapons' => '[]',
-        'armours' => '[]',
         'armour_class' => 10,
-        'speed' => 30,
-        'proficiency_bonus' => 2,
-        'saving_throws' => '[]',
-        'inspiration' => false,
-        'passive_perception' => 10,
-        'name' => 'Test',
+        'armours' => '[]',
         'class' => 'Test',
-        'race' => 'Test'
+        'inspiration' => false,
+        'level' => 1,
+        'name' => 'Test',
+        'passive_perception' => 10,
+        'proficiency_bonus' => 2,
+        'race' => 'Test',
+        'saving_throws' => '[]',
+        'speed' => 30,
+        'weapons' => '[]',
     ];
-
-    protected $appends = [
-        'abilities',
-        'skills',
-        'saving_throws'
-    ];
-
-    public function getAbilitiesAttribute(?string $value)
-    {
-        if (!is_null($value)) {
-            return json_decode($value, true);
-        }
-
-        $ret = [];
-
-        foreach (Ability::cases() as $ability) {
-            $ret[$ability->value] = 10;
-        }
-
-        return $ret;
-    }
-
-    public function getSavingThrowsAttribute(?string $value): array
-    {
-        if (!is_null($value)) {
-            return json_decode($value, true);
-        }
-
-        $ret = [];
-        foreach (Ability::cases() as $ability) {
-            $ret[$ability->value] = 0;
-        }
-
-        return $ret;
-    }
-
-    public function getSkillsAttribute(?string $value)
-    {
-        if (!is_null($value)) {
-            return json_decode($value, true);
-        }
-
-        $returnVal = [];
-        foreach (Skill::cases() as $skill) {
-            $returnVal[$skill->value] = [
-                'name' => $skill->getDisplayName(),
-                'ability' => $skill->getBaseAbility()->value,
-                'proficiencies' => 0,
-            ];
-        }
-
-        return $returnVal;
-    }
-
-    public function getSkillModifier(Skill $skill): int
-    {
-        return $this->getAbilityModifier($skill->getBaseAbility());
-    }
-
-    public function getAbilityModifier(Ability $ability): int
-    {
-        $baseAbility = $this->abilities[$ability->value];
-
-        $floatModifier = ($baseAbility - 10) / 2;
-        return match ($floatModifier <=> 0) {
-            -1 => ceil($floatModifier),
-            0 => 0,
-            1 => floor($floatModifier),
-        };
-    }
 
     protected function casts(): array
     {
         return [
-            'weapons' => 'array',
-            'armours' => 'array',
-            'skills' => 'array',
             'abilities' => 'array',
+            'armours' => 'array',
             'saving_throws' => 'array',
+            'skills' => 'array',
+            'weapons' => 'array',
         ];
     }
 }
