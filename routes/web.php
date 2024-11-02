@@ -8,6 +8,11 @@ Route::get('/', function () {
 });
 
 Route::get(
+    'character',
+    [CharacterController::class, 'index']
+)->name('character.index');
+
+Route::get(
     'character/create',
     [CharacterController::class, 'create']
 )->name('character.create');

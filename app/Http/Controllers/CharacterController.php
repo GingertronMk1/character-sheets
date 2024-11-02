@@ -14,7 +14,12 @@ class CharacterController extends Controller
      */
     public function index()
     {
-        //
+        return Inertia::render(
+            'Character/Index',
+            [
+                'characters' => Character::all()
+            ]
+        );
     }
 
     /**

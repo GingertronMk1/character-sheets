@@ -7,7 +7,7 @@ use Illuminate\Support\Str;
 
 class Character extends Model
 {
-    public static function boot()
+    public static function boot(): void
     {
         parent::boot();
         self::saving(function (self $model) {
