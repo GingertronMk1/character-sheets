@@ -5,32 +5,43 @@ import {Head, useForm, usePage} from "@inertiajs/vue3";
 import {Character} from "../../types";
 
 
-const props = defineProps<{
+const { character } = defineProps<{
     character: Character
 }>()
 
 const { props: { abilities, skills } } = usePage();
 
 const modifyPropCharacter = function (char: Character): Character {
-    Object.values(abilities).forEach(function (ability) {
-        char.abilities[ability] ??= 10;
+    const charAbilities = char.abilities ?? {};
+    const charSavingThrows = char.saving_throws ?? {};
+
+    Object.values(abilities).forEach(function (ability: string) {
+        charAbilities[ability] ??= 10;
+        charSavingThrows[ability] ??= 0;
     })
 
+    const charSkills = char.skills ?? {};
+
     Object.values(skills).forEach(function ({ name, base }) {
-        char.skills[name] ??= {
+        charSkills[name] ??= {
             proficiencies: 0,
             ability: base
         }
     })
 
+
+
     return {
         ...char,
-        weapons: [...char.weapons, {}]
+        abilities: {...charAbilities},
+        saving_throws: {...charSavingThrows},
+        skills: {...charSkills},
+        weapons: [...char.weapons, {}],
     }
 }
 
 
-const characterForm = useForm<Character>(modifyPropCharacter(props.character));
+const characterForm = useForm<Character>(modifyPropCharacter(character));
 
 const getAbilityScore: number = (scoreName: string, proficiencies = 0) => {
     const value = characterForm;
@@ -41,7 +52,6 @@ const getAbilityScore: number = (scoreName: string, proficiencies = 0) => {
 }
 
 const update = () => {
-    console.log(JSON.parse(JSON.stringify(characterForm)))
     characterForm.transform((char: Character) => ({
         ...char,
         weapons: char.weapons.filter(({ name }: Weapon) => !name)
@@ -124,7 +134,6 @@ const update = () => {
           Ability Scores
         </div>
         <div
-          v-if="character.abilities"
           class="card-body row"
         >
           <label
@@ -259,7 +268,7 @@ const update = () => {
               <span class="col-4">
                 <input
                   :id="`skills[${key}][proficiencies]`"
-                  v-model="characterForm.skills[key].proficiencies"
+                  v-model="characterForm.skills[score.name].proficiencies"
                   type="number"
                   min="0"
                   max="5"

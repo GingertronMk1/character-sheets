@@ -39,7 +39,7 @@ class Character extends Model
 
     protected $attributes = [
         'armour_class' => 10,
-        'armours' => '[]',
+        'armours' => '{}',
         'class' => 'Test',
         'inspiration' => false,
         'level' => 1,
@@ -47,9 +47,9 @@ class Character extends Model
         'passive_perception' => 10,
         'proficiency_bonus' => 2,
         'race' => 'Test',
-        'saving_throws' => '[]',
+        'saving_throws' => '{}',
         'speed' => 30,
-        'weapons' => '[]',
+        'weapons' => '{}',
     ];
 
     protected function casts(): array
