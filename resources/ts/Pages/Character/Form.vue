@@ -61,6 +61,11 @@ const update = () => {
             'put',
             route('character.update', {character: characterForm.slug})
         )
+    } else {
+        characterForm.submit(
+            'post',
+            route('character.store')
+        )
     }
 }
 
