@@ -4,6 +4,7 @@ import {shortenAbilityName} from "../../helpers";
 import {Head, useForm, usePage} from "@inertiajs/vue3";
 import {Character} from "../../types";
 import AppLayout from "../../Layouts/AppLayout.vue";
+import {computed} from "vue";
 
 
 const { character } = defineProps<{
@@ -44,11 +45,11 @@ const modifyPropCharacter = function (char: Character): Character {
 
 const characterForm = useForm<Character>(modifyPropCharacter(character));
 
-const getAbilityScore: number = (scoreName: string, proficiencies = 0) => {
-    const value = characterForm;
-    const ability = value.abilities[scoreName];
+const getAbilityScore: number = (scoreName: string) => {
+    const ability = characterForm.abilities[scoreName] ?? 10;
+    const proficiencies = characterForm.skills[scoreName]?.proficiencies ?? 0;
     const flooredAbility = Math.floor((ability - 10) / 2);
-    const proficiencyBonus = proficiencies * value.proficiency_bonus;
+    const proficiencyBonus = proficiencies * characterForm.proficiency_bonus;
     return flooredAbility + proficiencyBonus;
 }
 
@@ -70,6 +71,20 @@ const update = () => {
     }
 }
 
+const characterSkills = computed(
+    () => {
+        const returnVal = {};
+        Object.values(skills).forEach(({ base, name }) => {
+            const ability = characterForm.abilities[base] ?? 10;
+            const proficiencies = characterForm.skills[name]?.proficiencies ?? 0;
+            const flooredAbility = Math.floor((ability - 10) / 2);
+            const proficiencyBonus = proficiencies * characterForm.proficiency_bonus;
+            returnVal[name] = flooredAbility + proficiencyBonus;
+
+        });
+        return returnVal;
+    }
+)
 
 </script>
 
@@ -289,7 +304,7 @@ const update = () => {
                   data-fill-with="skill-score"
                   :data-skill="key"
                   :data-ability="score.ability"
-                  v-text="getAbilityScore(score.ability, score.proficiencies)"
+                  v-text="characterSkills[score.name]"
                 />
               </span>
             </label>
