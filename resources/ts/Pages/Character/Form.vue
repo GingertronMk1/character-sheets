@@ -1,10 +1,11 @@
 <script setup lang="ts">
 
-import {shortenAbilityName} from "../../helpers";
-import {Head, useForm, usePage} from "@inertiajs/vue3";
+import {shortenAbilityName, ucFirst} from "../../helpers";
+import {Head, InertiaForm, useForm, usePage} from "@inertiajs/vue3";
 import {Character} from "../../types";
 import AppLayout from "../../Layouts/AppLayout.vue";
 import {computed} from "vue";
+import {route} from "../../../../vendor/tightenco/ziggy";
 
 
 const { character } = defineProps<{
@@ -42,7 +43,6 @@ const modifyPropCharacter = function (char: Character): Character {
     }
 }
 
-
 const characterForm = useForm<Character>(modifyPropCharacter(character));
 
 const getAbilityScore: number = (scoreName: string) => {
@@ -53,21 +53,30 @@ const getAbilityScore: number = (scoreName: string) => {
     return flooredAbility + proficiencyBonus;
 }
 
-const update = () => {
-    characterForm.transform((char: Character) => ({
+const updateTransform = (char: InertiaForm<Character>) => {
+    const newWeapons =
+        Object.values(char.weapons)
+            .filter(({ name }) => name !== undefined && name.length);
+    return {
         ...char,
-        weapons: char.weapons.filter(({ name }: Weapon) => !name)
-    }))
+        weapons: newWeapons
+    }};
+
+const update = () => {
     if (characterForm.id) {
-        characterForm.submit(
-            'put',
-            route('character.update', {character: characterForm.slug})
-        )
+        characterForm
+            .transform(updateTransform)
+            .submit(
+                'put',
+                route('character.update', {character: characterForm.slug})
+            )
     } else {
-        characterForm.submit(
-            'post',
-            route('character.store')
-        )
+        characterForm
+            .transform(updateTransform)
+            .submit(
+                'post',
+                route('character.store')
+            )
     }
 }
 
@@ -281,7 +290,7 @@ const characterSkills = computed(
                 <span
                   class="col-6 text-truncate"
                 >
-                  <span v-text="score.name" />
+                  <span v-text="ucFirst(score.name)" />
                   <small
                     class="mb-auto ms-1"
                     v-text="shortenAbilityName(score.ability)"

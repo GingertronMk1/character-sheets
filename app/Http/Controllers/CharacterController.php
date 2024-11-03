@@ -42,6 +42,10 @@ class CharacterController extends Controller
         $newCharacter->skills = $request->input('skills');
         $newCharacter->abilities = $request->input('abilities');
         $newCharacter->saving_throws = $request->input('saving_throws');
+        $newCharacter->weapons = array_filter(
+            $request->input('weapons', []),
+            fn (array $weapon) => strlen($weapon['name'] ?? '')
+        );
         $newCharacter->save();
         return redirect()->route('character.show', $newCharacter);
     }
